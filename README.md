@@ -4,7 +4,9 @@ Intentional Binding Task
 
 The procedure for this task was based on that described by Moore et al., (2010). In the task, participants sat in front of a computer screen displaying a clock face (7 cm in diameter) with a single hand. The clock was marked with the conventional intervals (e.g. 5, 10, 15, etc, through to 60). The rotation of the clock hand was initiated by the experimenter and, beginning from 0, the hand rotated at one revolution every 2560 ms. [If we use voice recording, we might be able to initiate the rotation of the clock at say 3 seconds after that voice response.]
 
-There were four blocks in the task: two action –effect (agency) conditions and two baseline conditions (see Figure 2). 
+There were four blocks in the task: two action –effect (agency) conditions and two baseline conditions (see Figure 1).
+
+![Conditions](myimage.png)
 
 In the two action-effect conditions, the participants pressed the left mouse button with their right index finger at a random moment of their own volition, after the clock was started by the experimenter. The button press caused the presentation of a brief tone (1000 Hz, 75 ms duration) that was presented 250 ms after the action, and the clock hand continued to rotate for a random length of time after the tone (between 1500 ms and 2500 ms) after the button was pressed. Participants then gave a time estimate for where the rotating clock hand had been, either when they pressed the button (Action condition) or when they heard the tone (Effect condition), as demonstrated in Figure 2. Estimates were reported verbally and recorded by the experimenter. The conditions were presented in blocks, such that the participants always estimated either the action times only, or the tone times only. 
 
@@ -14,3 +16,4 @@ Thus, there were a total of four conditions in the Intentional Binding task, and
 
 For all estimates, participants were instructed to be as accurate as they could, and not to only to provide responses that were multiples of five according to the numbers displayed. This task took approximately 20 minutes. As dependent variables, the mean error between estimated and actual times was calculated for each condition.
 
+![Results example](myimage.png)
