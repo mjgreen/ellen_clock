@@ -1,19 +1,87 @@
 # ellen_clock
 
-Intentional Binding Task 
+# Intentional Binding Task
 
-The procedure for this task was based on that described by Moore et al., (2010). In the task, participants sat in front of a computer screen displaying a clock face (7 cm in diameter) with a single hand. The clock was marked with the conventional intervals (e.g. 5, 10, 15, etc, through to 60). The rotation of the clock hand was initiated by the experimenter and, beginning from 0, the hand rotated at one revolution every 2560 ms. [If we use voice recording, we might be able to initiate the rotation of the clock at say 3 seconds after that voice response.]
+## Task def 
 
-There were four blocks in the task: two action –effect (agency) conditions and two baseline conditions (see Figure 1).
+* The procedure for this task was based on that described by Moore et al., (2010). In the task, participants sat in front of a computer screen displaying a clock face (7 cm in diameter) with a single hand. 
+
+* The clock was marked with the conventional intervals (e.g. 5, 10, 15, etc, through to 60). 
+
+* The hand rotated at one revolution every 2560 ms, init position = 0
+
+* The clock hand continued to rotate for a random length of time after the tone (between 1500 ms and 2500 ms) after the button was pressed
+
+* The [conditions] were presented in [blocks], such that the participants always estimated either the action times only, or the tone times only. There were a total of four conditions in the Intentional Binding task, and each condition was preserved in a block. The four blocks were presented in randomised order [but maybe not randomised this time], and each block consisted of 20 trials. 
+    * There were four [blocks] in the task: two action –effect (agency) conditions and two baseline conditions 
+
+* [instruct] not to only to provide responses that were multiples of five according to the numbers displayed: yield int responses in the reals
+
+* [return] the mean error between estimated and actual times was calculated for each condition.
+
+## Procedure for Baseline conditions 
+
+### baseline with action
+
+* The rotation of the clock hand was initiated by kb
+
+* participant presses mac key whenever they like and this is the time stamp they are indicating when they respond. 
+    * Also init listener.
+
+* response is an estimate of what number the clock hand was pointed at at the time of the kb press, given as a time-stamped voice response
+
+* wav file close
+
+* repeat trial
+
+### baseline with tone
+
+* The rotation of the clock hand was initiated by kb
+
+* [tone] tone (1000 Hz, 75 ms duration) occurs at [some, tbc, min.max] duration since clock init. 
+    * Also init listener.
+
+* response is an estimate of what number the clock hand was pointed at at the time of the [tone], given as a time-stamped voice response
+
+* wav file close
+
+* repeat trial
+
+### action-effect tone condition
+
+Participants were instructed not to press any button
+
+* The rotation of the clock hand was initiated by kb
+
+* participant presses mac key whenever they like and this is the time stamp they are indicating when they respond.
+
+* [tone] tone (1000 Hz, 75 ms duration) occurs at [250 ms] duration since [kb press].
+    * Also init listener.
+
+* response is an estimate of what number the clock hand was pointed at at the time of the [tone], given as a time-stamped voice response
+
+* wav file close
+
+* repeat trial
+
+### action-effect action condition
+
+* The rotation of the clock hand was initiated by kb
+
+* participant presses mac key whenever they like and this is the time stamp they are indicating when they respond.
+
+* [tone] tone (1000 Hz, 75 ms duration) occurs at [250 ms] duration since [kb press].
+    * Also init listener.
+
+* response is an estimate of what number the clock hand was pointed at at the time of the [kb press], given as a time-stamped voice response
+
+* wav file close
+
+* repeat trial
+
+
 
 ![Conditions](conditions.gif)
 
-In the two action-effect conditions, the participants pressed the left mouse button with their right index finger at a random moment of their own volition, after the clock was started by the experimenter. The button press caused the presentation of a brief tone (1000 Hz, 75 ms duration) that was presented 250 ms after the action, and the clock hand continued to rotate for a random length of time after the tone (between 1500 ms and 2500 ms) after the button was pressed. Participants then gave a time estimate for where the rotating clock hand had been, either when they pressed the button (Action condition) or when they heard the tone (Effect condition), as demonstrated in Figure 2. Estimates were reported verbally and recorded by the experimenter. The conditions were presented in blocks, such that the participants always estimated either the action times only, or the tone times only. 
-
-In addition, two baseline conditions were included. In the baseline action condition, participants pressed the button at a moment of their choosing as before. However, the button press did not result in a tone, and they simply judged the time of their button press. In a baseline tone condition, participants were instructed not to press any button, but instead wait for a tone which was generated by the computer at a random time (relative to the rotation of the clock hand). Here the participants provided an estimate for the time of the tone onset. 
-
-Thus, there were a total of four conditions in the Intentional Binding task, and each condition was preserved in a block. The four blocks were presented in randomised order, and each block consisted of 20 trials. 
-
-For all estimates, participants were instructed to be as accurate as they could, and not to only to provide responses that were multiples of five according to the numbers displayed. This task took approximately 20 minutes. As dependent variables, the mean error between estimated and actual times was calculated for each condition.
 
 ![Results example](results.gif)
