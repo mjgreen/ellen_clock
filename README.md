@@ -15,7 +15,7 @@
 * The [conditions] were presented in [blocks], such that the participants always estimated either the action times only, or the tone times only. There were a total of four conditions in the Intentional Binding task, and each condition was preserved in a block. The four blocks were presented in randomised order [but maybe not randomised this time], and each block consisted of 20 trials. 
     * There were four [blocks] in the task: two action –effect (agency) conditions and two baseline conditions 
 
-* [instruct] not to only to provide responses that were multiples of five according to the numbers displayed: yield int responses in the reals
+* [instruct] not to only to provide responses that were multiples of five according to the numbers displayed: yield a response in {1,2,3,...} instead of in {0,5,10,10,...}
 
 * [return] the mean error between estimated and actual times was calculated for each condition.
 
