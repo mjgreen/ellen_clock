@@ -2,7 +2,7 @@
 
 # Intentional Binding Task
 
-## Task def 
+## Task definition
 
 * The procedure for this task was based on that described by Moore et al., (2010). In the task, participants sat in front of a computer screen displaying a clock face (7 cm in diameter) with a single hand. 
 
@@ -19,7 +19,7 @@
 
 * [return] the mean error between estimated and actual times was calculated for each condition.
 
-## Procedure for Baseline conditions 
+## Procedure 
 
 ### baseline with action
 
