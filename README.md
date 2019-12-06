@@ -13,7 +13,7 @@
 * The clock hand continued to rotate for a random length of time after the tone (between 1500 ms and 2500 ms) after the button was pressed
 
 * The [conditions] were presented in [blocks], such that the participants always estimated either the action times only, or the tone times only. There were a total of four conditions in the Intentional Binding task, and each condition was preserved in a block. The four blocks were presented in randomised order [but maybe not randomised this time], and each block consisted of 20 trials. 
-    * There were four [blocks] in the task: two action –effect (agency) conditions and two baseline conditions 
+    * There were four [blocks] in the task: two action–effect (agency) conditions and two baseline conditions 
 
 * [instruct] not to only to provide responses that were multiples of five according to the numbers displayed: yield a response in {1,2,3,...,58,59,60} instead of in {0,5,10,15,...,45,50,55,60}
 
