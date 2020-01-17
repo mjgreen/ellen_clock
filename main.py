@@ -1,6 +1,11 @@
 import numpy as np
 from psychopy import visual, event, core, monitors
 import psychopy.tools.coordinatetools
+from mygui import present_gui
+
+dlg = present_gui()
+condition = dlg['Condition']
+print(condition)
 
 # initialise the monitor
 mon = monitors.Monitor("e330", width=30.0, distance=60.0)
@@ -14,7 +19,7 @@ win = visual.Window(fullscr=False,  size=[900, 900], screen=0, color=[0, 0, 0], 
 # specify the coordinates of the numbers on the clock perimeter
 thetas = np.linspace(start=360+90, stop=90, num=12, endpoint=False, retstep=False, dtype='f8')
 xs, ys = psychopy.tools.coordinatetools.pol2cart(thetas, radius=300+20)
-xs = xs + 1920/4.0
+xs = xs + 1 + 1920/4.0
 coords = list(zip(xs, ys))
 
 # give the coordinates of each increment's position on the clock perimeter, for use in rotating the hand smoothly
@@ -45,13 +50,17 @@ clock_stimulus = visual.ImageStim(win, image="clock.jpg")
 
 
 # Draw the clock, and make the hand sweep round a few times
-
-for number_of_revolutions in range(2):
-    for secs in range(60*4):
-        myline = visual.Line(win, start=(0, 0), end=second_positions[secs], lineWidth=8)
-        clock_stimulus.draw()
-        myline.draw()
-        win.flip()
+started = False
+print('waiting for keypress')
+while not started:
+    started = True if len(event.getKeys()) else False
+    if started:
+        for number_of_revolutions in range(2):
+            for secs in range(60*4):
+                myline = visual.Line(win, start=(0, 0), end=second_positions[secs], lineWidth=8)
+                clock_stimulus.draw()
+                myline.draw()
+                win.flip()
 
 
 
