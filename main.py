@@ -51,10 +51,14 @@ clock_stimulus = visual.ImageStim(win, image="clock.jpg")
 
 # Draw the clock, and make the hand sweep round a few times
 started = False
+timer_on = False
 print('waiting for keypress')
 while not started:
     started = True if len(event.getKeys()) else False
-    if started:
+    if started and not timer_on:
+        t0 = core.getTime()
+        timer_on = True
+    if started and timer_on:
         for number_of_revolutions in range(2):
             for secs in range(60*4):
                 myline = visual.Line(win, start=(0, 0), end=second_positions[secs], lineWidth=8)
