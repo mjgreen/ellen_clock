@@ -1,7 +1,7 @@
 import numpy as np
 from psychopy import visual, event, core, monitors
 import psychopy.tools.coordinatetools
-from mygui import present_gui
+# from mygui import present_gui
 
 # dlg = present_gui()
 # condition = dlg['Condition']
@@ -17,15 +17,13 @@ mon.setSizePix((1920, 1080))
 # open the window
 if which_window_size == "small":
     win = visual.Window(fullscr=False,  size=[900, 900], screen=0, color=[0, 0, 0], units="pix", allowGUI=True,
-                        waitBlanking=True, monitor="e330", autoLog=False, winType='pyglet', gammaErrorPolicy="ignore")
+                        waitBlanking=True, monitor=mon, autoLog=False, winType='pyglet', gammaErrorPolicy="ignore")
 elif which_window_size == "fullscreen":
-    win = visual.Window(fullscr=True, units='pix', winType='pyglet')
+    win = visual.Window(fullscr=True, size=[1920, 1080], units='pix', winType='pyglet', monitor=mon)
 
 # specify the coordinates of the numbers on the clock perimeter
 thetas = np.linspace(start=360+90, stop=90, num=12, endpoint=False, retstep=False, dtype='f8')
 xs, ys = psychopy.tools.coordinatetools.pol2cart(thetas, radius=300+20)
-if which_window_size == "small":
-    xs = xs + 1 + 1920/4.0
 coords = list(zip(xs, ys))
 
 # give the coordinates of each increment's position on the clock perimeter, for use in rotating the hand smoothly
@@ -51,6 +49,7 @@ for i in range(12):
     txt.draw()
 win.getMovieFrame(buffer='back')
 win.saveMovieFrames("clock.jpg")
+win.clearBuffer()
 
 clock_stimulus = visual.ImageStim(win, image="clock.jpg")
 
@@ -60,18 +59,20 @@ started = False
 timer_on = False
 print('waiting for keypress')
 while not started:
-    started = True if len(event.getKeys()) else False
+    event.clearEvents()
+    if not started and not timer_on:
+        start_instructions = visual.TextStim(win, text="Press any key to start the clock")
+        start_instructions.draw()
+        win.flip()
+        started = True if len(event.getKeys()) else False
     if started and not timer_on:
         t0 = core.getTime()
         timer_on = True
     if started and timer_on:
         for number_of_revolutions in range(1):
             for secs in range(60*4):
-                myline = visual.Line(win, start=(0, 0), end=second_positions[secs], lineWidth=8)
                 clock_stimulus.draw()
-                myline.draw()
+                hand = visual.Line(win, start=(0, 0), end=second_positions[secs], lineWidth=8)
+                hand.draw()
                 win.flip()
 
-
-
-# event.waitKeys()
