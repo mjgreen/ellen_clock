@@ -3,9 +3,11 @@ from psychopy import visual, event, core, monitors
 import psychopy.tools.coordinatetools
 from mygui import present_gui
 
-dlg = present_gui()
-condition = dlg['Condition']
+# dlg = present_gui()
+# condition = dlg['Condition']
+condition = 'baseline action'
 print(condition)
+which_window_size = "fullscreen"
 
 # initialise the monitor
 mon = monitors.Monitor("e330", width=30.0, distance=60.0)
@@ -13,13 +15,17 @@ mon.saveMon()
 mon.setSizePix((1920, 1080))
 
 # open the window
-win = visual.Window(fullscr=False,  size=[900, 900], screen=0, color=[0, 0, 0], units="pix", allowGUI=True,
-                    waitBlanking=True, monitor="e330", autoLog=False, winType='pyglet', gammaErrorPolicy="ignore")
+if which_window_size == "small":
+    win = visual.Window(fullscr=False,  size=[900, 900], screen=0, color=[0, 0, 0], units="pix", allowGUI=True,
+                        waitBlanking=True, monitor="e330", autoLog=False, winType='pyglet', gammaErrorPolicy="ignore")
+elif which_window_size == "fullscreen":
+    win = visual.Window(fullscr=True, units='pix', winType='pyglet')
 
 # specify the coordinates of the numbers on the clock perimeter
 thetas = np.linspace(start=360+90, stop=90, num=12, endpoint=False, retstep=False, dtype='f8')
 xs, ys = psychopy.tools.coordinatetools.pol2cart(thetas, radius=300+20)
-xs = xs + 1 + 1920/4.0
+if which_window_size == "small":
+    xs = xs + 1 + 1920/4.0
 coords = list(zip(xs, ys))
 
 # give the coordinates of each increment's position on the clock perimeter, for use in rotating the hand smoothly
@@ -59,7 +65,7 @@ while not started:
         t0 = core.getTime()
         timer_on = True
     if started and timer_on:
-        for number_of_revolutions in range(2):
+        for number_of_revolutions in range(1):
             for secs in range(60*4):
                 myline = visual.Line(win, start=(0, 0), end=second_positions[secs], lineWidth=8)
                 clock_stimulus.draw()
