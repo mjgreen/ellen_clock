@@ -42,11 +42,11 @@ clock_text = ['60'] + [str(x) for x in range(5, 60, 5)]
 
 # draw the clock into a movie frame
 # TODO add tick marks
-clock_circle.draw()
-clock_centre.draw()
 for i in range(12):
     txt = visual.TextStim(win=win, text=clock_text[i], pos=coords[i])
     txt.draw()
+clock_circle.draw()
+clock_centre.draw()
 win.getMovieFrame(buffer='back')
 win.saveMovieFrames("clock.jpg")
 win.clearBuffer()
