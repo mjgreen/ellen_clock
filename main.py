@@ -12,7 +12,7 @@ tstamp = datetime.now().strftime('%Y%m%d%H%M%S')
 
 
 def present_gui():
-    dialogue = None
+    dialogue_out = None
 
     dialog = gui.Dlg(title="Intentional Binding", screen=0)
     #
@@ -20,17 +20,17 @@ def present_gui():
     dialog.addField('Participant Age', 19)
     dialog.addField('Participant Sex', choices=['female', 'male', 'other'])
     #
-    dialog.addField('Condition', choices=['baseline action', 'baseline tone', 'action-effect action', 'action-effect tone'])
+    dialog.addField('Condition', choices=['baseline_action', 'baseline_tone', 'action-effect_action', 'action-effect_tone'])
     #
     dialog.addField('Stimulus size', choices=['window', 'fullscreen'])
     #
     dialog.show()
     if dialog.OK:
-        dialogue = {dialog.__dict__["inputFieldNames"][i]: dialog.__dict__["data"][i] for i in range(len(dialog.__dict__["data"]))}
+        dialogue_out = {dialog.__dict__["inputFieldNames"][K]: dialog.__dict__["data"][K] for K in range(len(dialog.__dict__["data"]))}
     else:
         print('user cancelled')
         core.quit()
-    return dialogue
+    return dialogue_out
 
 
 dialogue = present_gui()
@@ -108,12 +108,24 @@ max_trial = trials[len(trials)-1]
 # Start the session
 session = {}
 
+if condition == "baseline_tone":
+    init_msg = "Don't press a key: wait for the tone, and estimate the clock time for the tone"
+if condition in ['action-effect_tone']:
+    init_msg = "Press a key: wait for the tone, then estimate the clock time for the tone"
+if condition in ['action-effect_action', 'baseline_action']:
+    init_msg = "Press a key: wait for the tone, then estimate the clock time for the key press"
+init_msg_stim = visual.TextStim(win, init_msg)
+init_msg_stim.draw()
+win.flip()
+core.wait(2)
+win.flip()
+
 # Start the trial loop
 for trial_number in trials:
     trial_name = str(trial_number)
     wave_file_directory = 'results'
-    wave_file_name = "participant_{}_trial_{}".format(participant, trial_number)
-    results_file_name = os.path.join("results", "participant_{}.csv".format(participant))
+    wave_file_name = "pp_{}_{}_trial_{}".format(participant, condition, trial_number)
+    results_file_name = os.path.join("results", "pp_{}_{}.csv".format(participant, condition))
     key__real_time_on = 0.0
     key__face_time_on = 0.0
     session[trial_number] = {
@@ -144,9 +156,9 @@ for trial_number in trials:
     wave_file_duration = 4
     request_estimate_text = None
     keep_rotating = True
-    if condition in ['action-effect tone', 'baseline tone']:
+    if condition in ['action-effect_tone', 'baseline_tone']:
         request_estimate_text = "When did you hear the tone?"
-    if condition in ['action-effect action', 'baseline action']:
+    if condition in ['action-effect_action', 'baseline_action']:
         request_estimate_text = "When did you press the key?"
 
     print('waiting for keypress to start the clock moving')
@@ -177,7 +189,7 @@ for trial_number in trials:
                     hand.draw()
                     win.flip()
 
-                    if condition in ['baseline tone'] and not tone_played:
+                    if condition in ['baseline_tone'] and not tone_played:
                         if trial_clock.getTime() >= fake_keypress_time:
                             tone_real_time_on = trial_clock.getTime()
                             tone_face_time_on = (increments / 4.0)
@@ -188,7 +200,7 @@ for trial_number in trials:
                             tone_played = True
                             countdown = core.CountdownTimer(start=post_keypress_rotation_duration)
 
-                    if condition in ['baseline action'] and not response_key_pressed:
+                    if condition in ['baseline_action'] and not response_key_pressed:
                         keys = event.getKeys(timeStamped=trial_clock)
                         if len(keys):
                             response_key_pressed = True
@@ -199,7 +211,7 @@ for trial_number in trials:
                             session[trial_number]["key__face_time_on"] = key__face_time_on
                             countdown = core.CountdownTimer(start=post_keypress_rotation_duration)
 
-                    if condition in ['action-effect tone', 'action-effect action'] and not response_key_pressed:
+                    if condition in ['action-effect_tone', 'action-effect_action'] and not response_key_pressed:
                         keys = event.getKeys(timeStamped=trial_clock)
                         if len(keys):
                             response_key_pressed = True
@@ -209,7 +221,7 @@ for trial_number in trials:
                             session[trial_number]["key__real_time_on"] = round(key__real_time_on, 4)
                             session[trial_number]["key__face_time_on"] = key__face_time_on
 
-                    if condition in ['action-effect tone', 'action-effect action'] and response_key_pressed and not tone_played:
+                    if condition in ['action-effect_tone', 'action-effect_action'] and response_key_pressed and not tone_played:
                         if trial_clock.getTime() - key__real_time_on >= 0.250:
                             tone_real_time_on = trial_clock.getTime()
                             tone_face_time_on = (increments / 4.0)
