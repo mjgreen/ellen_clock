@@ -67,7 +67,7 @@
 
 
 
-![Conditions](conditions.gif)
+![Conditions](docs/conditions.gif)
 
 
-![Results example](results.gif)
+![Results example](docs/results.gif)
