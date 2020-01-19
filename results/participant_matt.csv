@@ -1,0 +1,22 @@
+participant,matt
+age,19
+sex,male
+trial_number,1
+trial_name,1
+trial_condition,action-effect tone
+wave_file_name,matt_trial_1
+key__real_time_on,1.4019
+tone_real_time_on,1.668
+key__face_time_on,21.0
+tone_face_time_on,25.0
+participant,matt
+age,19
+sex,male
+trial_number,2
+trial_name,2
+trial_condition,action-effect tone
+wave_file_name,matt_trial_2
+key__real_time_on,2.4517
+tone_real_time_on,2.7179
+key__face_time_on,36.75
+tone_face_time_on,40.75

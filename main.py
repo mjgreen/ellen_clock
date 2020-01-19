@@ -174,6 +174,7 @@ for trial_number in trials:
                     if response_key_pressed and condition in ['baseline action']:
                         pass
                     if response_key_pressed and countdown.getTime() <= 0:
+                        win.clearBuffer()
                         win.flip()
                         break
                     win.flip()
