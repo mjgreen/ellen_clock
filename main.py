@@ -119,6 +119,7 @@ init_msg_stim.draw()
 win.flip()
 core.wait(2)
 win.flip()
+core.wait(2)
 
 # Start the trial loop
 for trial_number in trials:
