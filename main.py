@@ -7,22 +7,46 @@ import random
 import numpy as np
 import csv
 import os
-from guimy import present_gui
+from datetime import datetime
+tstamp = datetime.now().strftime('%Y%m%d%H%M%S')
+
+
+def present_gui():
+    dialogue = None
+
+    dialog = gui.Dlg(title="Intentional Binding", screen=0)
+    #
+    dialog.addField('Participant ID', 'tester')
+    dialog.addField('Participant Age', 19)
+    dialog.addField('Participant Sex', choices=['female', 'male', 'other'])
+    #
+    dialog.addField('Condition', choices=['baseline action', 'baseline tone', 'action-effect action', 'action-effect tone'])
+    #
+    dialog.addField('Stimulus size', choices=['window', 'fullscreen'])
+    #
+    dialog.show()
+    if dialog.OK:
+        dialogue = {dialog.__dict__["inputFieldNames"][i]: dialog.__dict__["data"][i] for i in range(len(dialog.__dict__["data"]))}
+    else:
+        print('user cancelled')
+        core.quit()
+    return dialogue
+
+
+dialogue = present_gui()
+participant = dialogue['Participant ID']
+age = dialogue["Participant Age"]
+sex = dialogue["Participant Sex"]
+condition = dialogue["Condition"]
 
 # Enable sound input/output: you need to do this well before you actually record anything, it is like 'power on'
 microphone.switchOn(sampleRate=16000)
-
-dlg = present_gui()
-participant = dlg['Participant ID']
-age = dlg["Participant Age"]
-sex = dlg["Participant Sex"]
-condition = dlg["Condition"]
 
 print("")
 print(condition)
 print("")
 
-which_stimulus_size = dlg["Stimulus size"]
+which_stimulus_size = dialogue["Stimulus size"]
 
 # initialise the monitor
 mon = monitors.Monitor("e330", width=30.0, distance=60.0)
@@ -78,18 +102,22 @@ win.clearBuffer()
 
 clock_stimulus = visual.ImageStim(win, image="clock.jpg")
 
-trials = [1, 2]
+trials = [1, 2, 3]
 max_trial = trials[len(trials)-1]
 
 # Start the session
 session = {}
-# Trial loop
+
+# Start the trial loop
 for trial_number in trials:
     trial_name = str(trial_number)
-    wave_file_name = str(participant) + "_trial_" + str(trial_number)
+    wave_file_directory = 'results'
+    wave_file_name = "participant_{}_trial_{}".format(participant, trial_number)
+    results_file_name = os.path.join("results", "participant_{}.csv".format(participant))
     key__real_time_on = 0.0
     key__face_time_on = 0.0
     session[trial_number] = {
+        "datetime": tstamp,
         "participant": participant,
         "age": age,
         "sex": sex,
@@ -97,12 +125,11 @@ for trial_number in trials:
         "trial_name": trial_name,
         "trial_condition": condition,
         "wave_file_name": wave_file_name,
-        "key__real_time_on": 0.0,
-        "tone_real_time_on": 0.0,
-        "key__face_time_on": 0.0,
-        "tone_face_time_on": 0.0,
+        "key__real_time_on": None,
+        "tone_real_time_on": None,
+        "key__face_time_on": None,
+        "tone_face_time_on": None,
     }
-    results_file_name = os.path.join("results", "participant_{}.csv".format(participant))
     trial_clock = None
     started = False
     start_key = []
@@ -113,15 +140,17 @@ for trial_number in trials:
     post_keypress_rotation_duration = random.randrange(start=1500, stop=2500, step=1) / 1000.0
     keys = []
     tone_played = False
-    fake_keypress_time = random.randrange(start=1000, stop=5000, step=1) / 1000
-    wave_file_directory = 'wave_files'
-    wave_file_duration = 5
+    fake_keypress_time = random.randrange(start=2000, stop=5000, step=1) / 1000
+    wave_file_duration = 4
     request_estimate_text = None
+    keep_rotating = True
     if condition in ['action-effect tone', 'baseline tone']:
         request_estimate_text = "When did you hear the tone?"
     if condition in ['action-effect action', 'baseline action']:
         request_estimate_text = "When did you press the key?"
-    print('waiting for keypress')
+
+    print('waiting for keypress to start the clock moving')
+
     while not started:
         event.clearEvents()
         if not started and not timer_on:
@@ -138,47 +167,66 @@ for trial_number in trials:
             timer_on = True
             trial_clock = core.Clock()
         if started and timer_on:
-            for number_of_revolutions in range(2):
-                for secs in range(60*4):
+
+            while keep_rotating is True:  # keep rotating until we break out of this loop: the only way to do that is for the countdown to become zero
+
+                for increments in range(60*4):
+
                     clock_stimulus.draw()
-                    hand = visual.Line(win, start=(0, 0), end=second_positions[secs], lineWidth=8)
+                    hand = visual.Line(win, start=(0, 0), end=second_positions[increments], lineWidth=8)
                     hand.draw()
-                    if not response_key_pressed:
-                        keys = event.getKeys(timeStamped=trial_clock)
-                    if not response_key_pressed and len(keys):
-                        response_key_pressed = True
-                        event.clearEvents()
-                        key__real_time_on = float(keys[0][1])
-                        key__face_time_on = float(secs / 4.0)
-                        session[trial_number]["key__real_time_on"] = round(key__real_time_on, 4)
-                        session[trial_number]["key__face_time_on"] = key__face_time_on
-                        countdown = core.CountdownTimer(start=post_keypress_rotation_duration)
-                    if response_key_pressed and condition in ['action-effect tone', 'action-effect action'] and not tone_played:
-                        if trial_clock.getTime() - key__real_time_on >= 0.250:
-                            tone_real_time_on = trial_clock.getTime()
-                            tone_face_time_on = (secs / 4.0)
-                            session[trial_number]["tone_real_time_on"] = round(tone_real_time_on, 4)
-                            session[trial_number]["tone_face_time_on"] = round(tone_face_time_on, 4)
-                            tone = sound.Sound(value=1000, secs=0.075)
-                            tone.play()
-                            tone_played = True
-                    if not response_key_pressed and condition in ['baseline tone'] and not tone_played:
-                        if trial_clock.getTime() >= fake_keypress_time:
-                            tone_real_time_on = trial_clock.getTime()
-                            tone_face_time_on = (secs / 4.0)
-                            session[trial_number]["tone_real_time_on"] = round(tone_real_time_on, 4)
-                            session[trial_number]["tone_face_time_on"] = round(tone_face_time_on, 4)
-                            tone = sound.Sound(value=1000, secs=0.075)
-                            tone.play()
-                            tone_played = True
-                    if response_key_pressed and condition in ['baseline action']:
-                        pass
-                    if response_key_pressed and countdown.getTime() <= 0:
-                        win.clearBuffer()
-                        win.flip()
-                        break
                     win.flip()
 
+                    if condition in ['baseline tone'] and not tone_played:
+                        if trial_clock.getTime() >= fake_keypress_time:
+                            tone_real_time_on = trial_clock.getTime()
+                            tone_face_time_on = (increments / 4.0)
+                            session[trial_number]["tone_real_time_on"] = round(tone_real_time_on, 4)
+                            session[trial_number]["tone_face_time_on"] = round(tone_face_time_on, 4)
+                            tone = sound.Sound(value=1000, secs=0.075)
+                            tone.play()
+                            tone_played = True
+                            countdown = core.CountdownTimer(start=post_keypress_rotation_duration)
+
+                    if condition in ['baseline action'] and not response_key_pressed:
+                        keys = event.getKeys(timeStamped=trial_clock)
+                        if len(keys):
+                            response_key_pressed = True
+                            event.clearEvents()
+                            key__real_time_on = float(keys[0][1])
+                            key__face_time_on = float(increments / 4.0)
+                            session[trial_number]["key__real_time_on"] = round(key__real_time_on, 4)
+                            session[trial_number]["key__face_time_on"] = key__face_time_on
+                            countdown = core.CountdownTimer(start=post_keypress_rotation_duration)
+
+                    if condition in ['action-effect tone', 'action-effect action'] and not response_key_pressed:
+                        keys = event.getKeys(timeStamped=trial_clock)
+                        if len(keys):
+                            response_key_pressed = True
+                            event.clearEvents()
+                            key__real_time_on = float(keys[0][1])
+                            key__face_time_on = float(increments / 4.0)
+                            session[trial_number]["key__real_time_on"] = round(key__real_time_on, 4)
+                            session[trial_number]["key__face_time_on"] = key__face_time_on
+
+                    if condition in ['action-effect tone', 'action-effect action'] and response_key_pressed and not tone_played:
+                        if trial_clock.getTime() - key__real_time_on >= 0.250:
+                            tone_real_time_on = trial_clock.getTime()
+                            tone_face_time_on = (increments / 4.0)
+                            session[trial_number]["tone_real_time_on"] = round(tone_real_time_on, 4)
+                            session[trial_number]["tone_face_time_on"] = round(tone_face_time_on, 4)
+                            tone = sound.Sound(value=1000, secs=0.075)
+                            tone.play()
+                            tone_played = True
+                            countdown = core.CountdownTimer(start=post_keypress_rotation_duration)
+
+                    if countdown is not None and countdown.getTime() <= 0:
+                        win.clearBuffer()
+                        win.flip()
+                        keep_rotating = False  # break out of the outer while loop
+                        break  # break out of the 'for increments ...' loop, carrying the value of keep_rotating into the outer while loop
+
+    # end of trial
     trial_microphone = microphone.AudioCapture(name=wave_file_name, saveDir=wave_file_directory, stereo=False, chnl=0)
     trial_microphone.reset()
     request = visual.TextStim(win, request_estimate_text)
@@ -192,6 +240,9 @@ for trial_number in trials:
     if trial_number < max_trial:
         iti = visual.TextStim(win, "Get ready for the next trial ...")
         iti.draw()
+    else:
+        end_msg = visual.TextStim(win, "Thank you and goodbye ...")
+        end_msg.draw()
     win.flip()
     core.wait(2)
 
@@ -200,8 +251,11 @@ for trial_number in trials:
         print("{}\t{}".format(k, v))
     print("")
 
-w = csv.writer(open(results_file_name, "w"))
-for t in trials:
-    this_trial = session[t]
-    for key, val in this_trial.items():
-        w.writerow([key, val])
+# end of session
+with open(results_file_name, "w") as csv_file:
+    for t in trials:
+        fieldnames = list(session[t].keys())
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        if t == 1:
+            writer.writeheader()
+        writer.writerow(session[t])
