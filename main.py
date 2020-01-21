@@ -23,6 +23,7 @@ def present_gui():
     dialog.addField('Condition', choices=['baseline_action', 'baseline_tone', 'action_action_100', 'action_action_75', 'action_action_50', 'action_tone_100', 'action_tone_75', 'action_tone_50'])
     #
     dialog.addField('Stimulus size', choices=['window', 'fullscreen'])
+    dialog.addField('Clock radius (pixels)', 225)
     #
     dialog.addField('autopilot', initial=False)
     dialog.show()
@@ -40,6 +41,8 @@ age = dialogue["Participant Age"]
 sex = dialogue["Participant Sex"]
 condition = dialogue["Condition"]
 autopilot = dialogue["autopilot"]
+clock_radius = dialogue['Clock radius (pixels)']
+which_stimulus_size = dialogue["Stimulus size"]
 
 # Enable sound input/output: you need to do this well before you actually record anything, it is like 'power on'
 microphone.switchOn(sampleRate=16000)
@@ -47,8 +50,6 @@ microphone.switchOn(sampleRate=16000)
 print("")
 print(condition)
 print("")
-
-which_stimulus_size = dialogue["Stimulus size"]
 
 # initialise the monitor
 mon = monitors.Monitor("e330", width=30.0, distance=60.0)
@@ -64,22 +65,22 @@ elif which_stimulus_size == "fullscreen":
 
 # specify the coordinates of the numbers on the clock perimeter
 thetas = np.linspace(start=360+90, stop=90, num=12, endpoint=False, retstep=False, dtype='f8')
-xs, ys = psychopy.tools.coordinatetools.pol2cart(thetas, radius=300+30)
+xs, ys = psychopy.tools.coordinatetools.pol2cart(thetas, radius=clock_radius+30)
 text_positions = list(zip(xs, ys))
 
 # give the coordinates of each increment's position on the clock perimeter, for use in rotating the hand smoothly
 thetas = np.linspace(start=360+90, stop=90, num=60*4, endpoint=False, retstep=False, dtype='f8')
-xs, ys = psychopy.tools.coordinatetools.pol2cart(thetas, radius=300)
+xs, ys = psychopy.tools.coordinatetools.pol2cart(thetas, radius=clock_radius)
 second_positions = list(zip(xs, ys))
 
 # Make a stimulus for the clock's perimeter
-clock_circle = visual.Circle(win, radius=300, edges=32*8, pos=(0, 0), name='clock')
+clock_circle            = visual.Circle(win, radius=clock_radius, edges=32*8, pos=(0, 0), name='clock')
 
 # Make a not-shown circle with 12 edges for tick mark positions
-tick_circle_start_major = visual.Circle(win, radius=300, edges=12, pos=(0, 0))
-tick_circle_end_major =   visual.Circle(win, radius=300+13, edges=12, pos=(0, 0))
-tick_circle_start_minor = visual.Circle(win, radius=300, edges=60, pos=(0, 0))
-tick_circle_end_minor =   visual.Circle(win, radius=300+7, edges=60, pos=(0, 0))
+tick_circle_start_major = visual.Circle(win, radius=clock_radius, edges=12, pos=(0, 0))
+tick_circle_end_major =   visual.Circle(win, radius=clock_radius+13, edges=12, pos=(0, 0))
+tick_circle_start_minor = visual.Circle(win, radius=clock_radius, edges=60, pos=(0, 0))
+tick_circle_end_minor =   visual.Circle(win, radius=clock_radius+7, edges=60, pos=(0, 0))
 
 # Make a stimulus for the clock's centre
 clock_centre = visual.Circle(win, radius=5, edges=32*8, pos=(0, 0), name='center', fillColor='white')
@@ -154,6 +155,7 @@ for trial in range(len(trials)):
         "trial_name": trial_name,
         "trial_condition": condition,
         "wave_file_name": wave_file_name,
+        "clock_radius": clock_radius,
         "key__real_time_on": None,
         "tone_real_time_on": None,
         "key__face_time_on": None,
