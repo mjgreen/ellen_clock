@@ -11,4 +11,4 @@
   comes with psychopy (1.4.9 as I write on Jan 18th 2020) doesn't work, and causes major problems with the visual 
   presentation side of things, to the point of crashing the experiment when it starts up. The solution is to roll 
   back to a specific earlier version. That's what the "pyglet==1.3.2" part of the next line does.
-    * `pip install psychopy pyglet==1.3.2`
+    * `pip install psychopy pyglet==1.3.2 pygame pyo`
