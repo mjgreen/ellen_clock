@@ -24,6 +24,7 @@ def present_gui():
     #
     dialog.addField('Stimulus size', choices=['window', 'fullscreen'])
     dialog.addField('Clock radius (pixels)', 225)
+    dialog.addField('How many trials?', choices=[20, 40])
     #
     dialog.addField('autopilot', initial=False)
     dialog.show()
@@ -105,8 +106,10 @@ win.clearBuffer()
 
 clock_stimulus = visual.ImageStim(win, image="clock.jpg")
 
-trials = list(range(1, 41))
+trials = list(range(1, dialogue['How many trials?']+1))
+
 max_trial = trials[len(trials)-1]
+
 probabilities = []
 if condition in ['action_action_75', 'action_tone_75']:
     probabilities = [True] * int(.75 * len(trials)) + [False] * int(.25 * len(trials))
@@ -172,12 +175,12 @@ for trial in range(len(trials)):
     keys = []
     tone_played = False
     fake_keypress_time = random.randrange(start=2000, stop=5000, step=1) / 1000
-    wave_file_duration = 4
+    wave_file_duration = 6
     request_estimate_text = None
     keep_rotating = True
-    if condition in ['action_tone_100', 'baseline_tone']:
+    if condition in ['baseline_tone', 'action_tone_100', 'action_tone_75', 'action_tone_50']:
         request_estimate_text = "When did you hear the tone?"
-    if condition in ['action_action_100', 'baseline_action']:
+    if condition in ['baseline_action', 'action_action_100','action_action_75', 'action_action_50']:
         request_estimate_text = "When did you press the key?"
 
     print('waiting for keypress to start the clock moving')
