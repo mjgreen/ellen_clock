@@ -1,5 +1,9 @@
 # ellen_clock
 
+Python 3.6.10 |Anaconda, Inc.| (default, Jan  7 2020, 21:14:29) 
+
+[GCC 7.3.0] on linux
+
 # Intentional Binding Task
 
 ## Task definition

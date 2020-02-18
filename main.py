@@ -1,3 +1,6 @@
+# Python 3.6.10 |Anaconda, Inc.| (default, Jan  7 2020, 21:14:29) 
+# [GCC 7.3.0] on linux
+
 from psychopy import prefs
 prefs.hardware['audioLib'] = ['pyo']
 # prefs.hardware['audioLatencyMode'] = '3'  # Aggressive exclusive mode in PTB
@@ -24,7 +27,7 @@ def present_gui():
     #
     dialog.addField('Stimulus size', choices=['window', 'fullscreen'])
     dialog.addField('Clock radius (pixels)', 225)
-    dialog.addField('How many trials?', choices=[20, 40])
+    dialog.addField('How many trials?', choices=[20, 30, 40])
     #
     dialog.addField('autopilot', initial=False)
     dialog.show()
@@ -127,14 +130,16 @@ session = {}
 init_msg = None
 if condition == "baseline_tone":
     init_msg = "Don't press a key: wait for the tone, and estimate the clock time for the tone"
-if condition in ['action_tone_100']:
+if condition == "baseline_action":
+    init_msg = "Press a key: then estimate the clock time for the key press"
+if condition in ['action_tone_100', 'action_tone_75', 'action_tone_50']:
     init_msg = "Press a key: wait for the tone, then estimate the clock time for the tone"
-if condition in ['action_action_100', 'baseline_action']:
+if condition in ['action_action_100', 'action_action_75', 'action_action_50']:
     init_msg = "Press a key: wait for the tone, then estimate the clock time for the key press"
 init_msg_stim = visual.TextStim(win, init_msg)
 init_msg_stim.draw()
 win.flip()
-core.wait(2)
+core.wait(5)
 win.flip()
 core.wait(2)
 
@@ -180,7 +185,7 @@ for trial in range(len(trials)):
     keep_rotating = True
     if condition in ['baseline_tone', 'action_tone_100', 'action_tone_75', 'action_tone_50']:
         request_estimate_text = "When did you hear the tone?"
-    if condition in ['baseline_action', 'action_action_100','action_action_75', 'action_action_50']:
+    if condition in ['baseline_action', 'action_action_100', 'action_action_75', 'action_action_50']:
         request_estimate_text = "When did you press the key?"
 
     print('waiting for keypress to start the clock moving')
