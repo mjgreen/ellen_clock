@@ -27,7 +27,7 @@ Python 3.6.10 |Anaconda, Inc.| (default, Jan  7 2020, 21:14:29)
 * Baseline action: spoken response is a clock-time estimate for the keypress.
 * Baseline tone: spoken response is a clock-time estimate for the tone.
 * Action-effect action: spoken response is a clock-time estimate for the keypress (where a tone is played just after the keypress).
-* Action-effect tone: spoken response  is a clock-time estimate for the tone (the tome that occurred just after the keypress).
+* Action-effect tone: spoken response  is a clock-time estimate for the tone (the tone that occurred just after the keypress).
 
 ## Procedure for each of the 4 conditions
 
