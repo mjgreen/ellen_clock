@@ -1,3 +1,8 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
 # ellen_clock
 
 Python 3.6.10 |Anaconda, Inc.| (default, Jan  7 2020, 21:14:29) 
